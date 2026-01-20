@@ -21,7 +21,10 @@ export default function LessonScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [canGoNext, setCanGoNext] = useState(false);
   const [lessonProgress, setLessonProgress] = useState({});
+  const [courseProgress, setCourseProgress] = useState(null);
   //const [progressData, setProgressData] = useState({});
+
+  const watchedLessons = courseProgress?.progress.completedLessons || [];
 
   const currentLesson = lessons[currentIndex];
   //console.log("Lessons:", lessons);
@@ -39,6 +42,16 @@ export default function LessonScreen() {
 
   //   loadProgress();
   // }, [course]);
+  useEffect(() => {
+      async function loadProgress() {
+        if (course) {
+        const deviceId = await getDeviceInfo().then(info => info.id);
+        const progress = await getCourseProgress(deviceId, course);
+        setCourseProgress(progress);
+        }
+      }
+      loadProgress();
+    }, [course]);
 
   useEffect(() => {
     async function loadLessonProgress() {
@@ -222,6 +235,7 @@ export default function LessonScreen() {
 
         {lessons.map((lesson, index) => {
           const isActive = index === currentIndex;
+          const isWatched = watchedLessons.includes(lesson.id);
 
           return (
             <Pressable
@@ -245,7 +259,7 @@ export default function LessonScreen() {
                   {lesson.title}
                 </Text>
 
-                {lesson.watched && (
+                {isWatched && (
                   <Text
                     className={`text-xs ${
                       isActive ? "text-white" : "text-green-600"

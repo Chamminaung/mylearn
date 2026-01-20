@@ -79,3 +79,20 @@ export const updateLessonWatchedStatus = async (courseId, lessonId, payload) => 
   });
   return res.json();
 };
+
+// register device
+export const registerDevice = async (deviceId, platform, appVersion) => {
+  const res = await fetch(`${API_URL}/api/userdevices`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deviceId, platform,
+      appVersion }),
+  });
+  return res.json();
+};
+
+//get admin stats
+export const getAdminStats = async () => {
+  const res = await fetch(`${API_URL}/api/admin/stats`);
+  return res.json();
+};

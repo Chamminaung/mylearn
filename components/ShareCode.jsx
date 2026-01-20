@@ -14,7 +14,7 @@ export default function ShareCodeScreen({courseId, title}) {
   const [expiresAt, setExpiresAt] = useState(null);
   const [secondsLeft, setSecondsLeft] = useState(0);
 
-  const deviceId = 'web-c6fda664-766d-49aa-bd46-7fecd33e13272'; // For web testing purpose
+  const deviceId = 'web-c6fda664-766d-49aa-bd46-7fecd33e1327'; // For web testing purpose
   //const deviceId = await getDeviceInfo().then(info => info.id); 
 
   useEffect(() => {

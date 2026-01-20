@@ -9,6 +9,10 @@ export const theme = {
         danger: '#DC2626',       // red-600
         grayLight: '#F3F4F6',    // gray-100
         grayDark: '#4B5563',     // gray-700
+        background: "#0f172a",
+        card: "#020617",
+        border: "#1e293b",
+        //primary: "#22c55e",
       },
       fontFamily: {
         heading: ['Inter_700Bold', 'sans-serif'],

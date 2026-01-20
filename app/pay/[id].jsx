@@ -286,7 +286,7 @@ async function registerPaymentToBackend(payload) {
             }
     } catch (e) {
       setUploading(false);
-      showAlert("Error", "Server error.");
+      showAlert("Error", "Server error." + e.message || e.toString());
       console.error("Upload error:", e);
     }
   };
@@ -301,7 +301,7 @@ async function registerPaymentToBackend(payload) {
         </View>
         <Pressable
           onPress={openSheet}
-          className="bg-blue-600 px-6 rounded-2xl"
+          className="bg-blue-600 px-6 rounded-2xl py-3"
         >
           <Text className="text-white text-lg font-semibold">Buy Now</Text>
         </Pressable>
@@ -329,11 +329,13 @@ async function registerPaymentToBackend(payload) {
               <Text>၂. ငွေလွှဲနည်းရွေးပါ</Text>
               <Text>၃. Screenshot ထည့်ပေးပါ</Text>
               <Text>၄. ဝယ်ယူမှု အောင်မြင်ပါပြီ 🎉</Text>
+              <Text>5. Profile tab တွင် access code ၄ လုံးရရှိပြီး နောက် device တစ်ခုတွင် activate လုပ်နိုင်ပါ 🎉</Text>
             </View>
 
             {/* Phone */}
             <View className="bg-gray-100 mt-5 p-4 rounded-xl flex-row justify-between items-center">
-              <Text className="text-lg font-bold">{PHONE}</Text>
+              <Text className="text-lg font-bold">Account Name- Chan Min Aung </Text>
+              <Text className="text-lg font-bold">{PHONE}</Text>              
               <Pressable onPress={copyPhone}>
                 <Feather name="copy" size={22} />
               </Pressable>
