@@ -61,15 +61,13 @@ export default  function EnterCodeScreen({courseId}) {
   };
 
   return (
-    <View className="flex-1 bg-white px-6 justify-center">
+    <View className="bg-white px-6">
       <Text className="text-2xl font-bold text-center mb-2">
         Enter Access Code
       </Text>
-
       <Text className="text-center text-gray-500 mb-6">
         Course ကို unlock လုပ်ဖို့ 4-digit code ထည့်ပါ
       </Text>
-
       <TextInput
         value={code}
         onChangeText={setCode}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { getDeviceInfo } from '../utils/deviceInfo';
 
 export default function DeviceScreen() {
@@ -8,7 +8,7 @@ export default function DeviceScreen() {
   useEffect(() => {
     (async () => {
       const deviceInfo = await getDeviceInfo();
-      console.log('Device Info:', deviceInfo);
+      //console.log('Device Info:', deviceInfo);
       setInfo(deviceInfo);
     })();
   }, []);

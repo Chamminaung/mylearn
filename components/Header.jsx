@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 //import AdminDashboard from@/app/(admin)/adminex";
 import {router} from "expo-router";
+import DonateButton from '@/components/DonateButton'
 
 export default function Header() {
   return (
@@ -20,11 +21,13 @@ export default function Header() {
       </View>
 
       {/* Right side icons */}
-      <TouchableOpacity
+      <DonateButton />
+
+      {/* <TouchableOpacity
         onPress={() => console.log("Profile pressed")}
       >
         <Ionicons name="person-circle-outline" size={28} color="#555" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

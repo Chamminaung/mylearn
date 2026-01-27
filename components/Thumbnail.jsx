@@ -7,6 +7,7 @@ import { StyleSheet, View } from 'react-native';
 export default function YouTubeThumbnail({id}) {
   const VIDEO_ID = id; // Replace with your video ID
   const thumbnailURL = `https://img.youtube.com/vi/${VIDEO_ID}/sddefault.jpg`;
+
   return (
     <View style={styles.container}>
       <Image

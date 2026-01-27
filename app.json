@@ -4,7 +4,7 @@
     "slug": "video-learn-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.png",    
     "splash": {
       "image": "./assets/splash-icon.png"
     },
@@ -16,7 +16,6 @@
     ],
     "scheme": ["videolearnapp", "exp+video-learn-app"],
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
 
     "ios": {
       "supportsTablet": true,
@@ -29,14 +28,25 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
+      "icon": "./assets/icon.png",
       "edgeToEdgeEnabled": true
+    },
+
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
 
     "plugins": [
       "expo-router",
       "expo-secure-store",
       "expo-web-browser",
-      "expo-video"
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
+      ]
     ]
   }
 }

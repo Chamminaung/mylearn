@@ -1,8 +1,7 @@
-import { View, Text, Pressable } from "react-native";
-import { useEffect, useState } from "react";
-import * as Clipboard from "expo-clipboard";
-import { API_URL } from "@/api/apiURL";
 import { getDeviceInfo } from "@/utils/deviceInfo";
+import * as Clipboard from "expo-clipboard";
+import { useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 
 
 
@@ -41,7 +40,7 @@ export default function ShareCodeScreen({courseId, title}) {
       `https://api-for-lessonsapp.vercel.app/api/payments/share-code?courseId=${courseId}&deviceId=${deviceId}`
     );
     const data = await res.json();
-    console.log("Share code data:", data);
+    //console.log("Share code data:", data);
 
     setCode(data.code);
     setUsed(data.used);

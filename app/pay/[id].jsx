@@ -1,13 +1,11 @@
+import EnterCodeScreen from '@/components/EnterCode';
+import { useAlert } from "@/context/AlertContext";
 import { Feather } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import axios from "axios";
 import * as Clipboard from "expo-clipboard";
-//import * as ImageManipulator from 'expo-image-manipulator';
-//import { ImageManipulator } from "expo-image-manipulator";
-import { ImageManipulator, useImageManipulator, FlipType, SaveFormat } from "expo-image-manipulator";
-import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
-//import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { forwardRef, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -20,9 +18,6 @@ import {
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { getDeviceInfo } from "../../utils/deviceInfo";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import EnterCodeScreen from '@/components/EnterCode'
-import { useAlert } from "@/context/AlertContext";
 
 
 // ---------- CONFIG ----------
@@ -98,11 +93,7 @@ const PaymentBottomSheet = forwardRef((props, externalRef) => {
   };
 
   const onSelectMethod = async (method) => {
-      //setModalVisible(false);
       setSelectedMethod(method);
-      // optional: set expected amount here if the user picked quantity/price
-      // open the payment app so user can perform transfer
-      //await openApp(method.url);
       showAlert('Next step', 'After making the transfer in the payment app, please upload the screenshot of the successful transfer.');
   };
 
@@ -113,20 +104,7 @@ const PaymentBottomSheet = forwardRef((props, externalRef) => {
               base64: true,
             });
       
-            if (result.canceled) return null;            
-
-            // const manipulated = ImageManipulator.manipulate(result.assets[0].uri);
-            // const resized = manipulated.resize({ width: 800 }); // Resize to width 800px, maintain aspect ratio
-            // manipulated.uri ကို base64 ပြောင်းရန်
-        //     const response = await fetch(result.assets[0].uri);
-        //     const blob = await response.blob();
-
-        //   // ArrayBuffer ကို Uint8Array နဲ့ convert ပြုလုပ်ပြီး base64 encode
-        // const arrayBuffer = await blob.arrayBuffer();
-        //   const base64 = btoa(
-        //   String.fromCharCode(...new Uint8Array(arrayBuffer))
-        //   );
-
+            if (result.canceled) return null;  
           setImage({ uri: result.assets[0].uri,   base64: result.assets[0].base64 });
 
           return { uri: result.assets[0].uri, base64: result.assets[0].base64 }; 
@@ -148,8 +126,6 @@ const PaymentBottomSheet = forwardRef((props, externalRef) => {
     days: Math.floor(ms / (1000 * 60 * 60 * 24)),
   };
 }
-
-
 
   async function uploadImageForOCR(base64, onProgress) {
   return axios
@@ -231,14 +207,14 @@ async function registerPaymentToBackend(payload) {
       .then(res => res.text.replace(/`/g, "").replace(/\n/g, " ").trim())
       .then(res => JSON.parse(res));
 
-      console.log("OCR Response:", ocrRes);
+      //console.log("OCR Response:", ocrRes);
       //const ssocrResult = JSON.parse(ocrRes.text);
       // const cleanOcr = await ocrRes.text.replace(/`/g, "").replace(/\n/g, " ").trim();
       // const jsonocr = await JSON.parse(cleanOcr);
       //setOcrResult(ocrRes);
-      console.log("OCR Result:", ocrRes.amount_ks);
+      //console.log("OCR Result:", ocrRes.amount_ks);
       const validation = await validateOCRText(ocrRes);
-      console.log("Validation Result:", validation);
+      //console.log("Validation Result:", validation);
       if (!validation.ok) {
         setUploading(false);
         showAlert("Validation Failed", validation.reason);
@@ -292,21 +268,23 @@ async function registerPaymentToBackend(payload) {
   };
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 bg-white">
         {/* BUY NOW BUTTON */}
-        <View className="items-center space-y-4">
-        <EnterCodeScreen courseId={courseId}/>
-        <View className="my-4">
-          <Text className="text-gray-500">OR</Text>
-        </View>
-        <Pressable
-          onPress={openSheet}
-          className="bg-blue-600 px-6 rounded-2xl py-3"
-        >
-          <Text className="text-white text-lg font-semibold">Buy Now</Text>
-        </Pressable>
-        </View>
+        <View className="flex-1 items-center justify-center px-4">
+          <EnterCodeScreen courseId={courseId} />
 
+          <Text className="text-gray-500 my-3">OR</Text>
+
+          <Pressable
+            onPress={openSheet}
+            className="bg-blue-600 px-1 py-3 rounded-2xl w-60 items-center"
+          >
+          <Text className="text-white text-lg font-semibold">
+            Buy Now
+          </Text>
+          </Pressable>
+          </View>
+</View>
         {/* BOTTOM SHEET */}
         <BottomSheet
           ref={bottomSheetRef}
@@ -333,7 +311,7 @@ async function registerPaymentToBackend(payload) {
             </View>
 
             {/* Phone */}
-            <View className="bg-gray-100 mt-5 p-4 rounded-xl flex-row justify-between items-center">
+            <View className="bg-gray-100 mt-5 p-4 rounded-xl flex-auto justify-between items-center">
               <Text className="text-lg font-bold">Account Name- Chan Min Aung </Text>
               <Text className="text-lg font-bold">{PHONE}</Text>              
               <Pressable onPress={copyPhone}>
@@ -410,7 +388,7 @@ async function registerPaymentToBackend(payload) {
 
           </BottomSheetScrollView>
         </BottomSheet>
-      </View>
+      
     </GestureHandlerRootView>
   );
 });

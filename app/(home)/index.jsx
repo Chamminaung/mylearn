@@ -1,6 +1,5 @@
 import { registerDevice } from '@/api/apiCalls';
 import HomeScreen from '@/screens/HomeScreen';
-import { Text, View } from 'react-native';
 import { getDeviceInfo } from '@/utils/deviceInfo';
 import * as Application from 'expo-application';
 import { useEffect } from 'react';

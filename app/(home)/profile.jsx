@@ -1,14 +1,8 @@
-import { View, Text } from 'react-native'
-import React, { use } from 'react'
-import { useState } from 'react'
-import ProfileScreen from '@/screens/ProfileScreen'
-import YoutubeScreen from '@/screens/YoutubeScreen'
-import DeviceInfoDisplay from '@/devices/deviceInfo'
-import { getDeviceId } from '@/devices/device'
-import DeviceScreen from '@/screens/deviceInfo'
-import ShareCodeScreen from '@/components/ShareCode'
-import api from "@/api/api";
-import { ScrollView } from 'react-native-gesture-handler'
+//import HlsVideoScreen from '@/components/VideoPlayerPaid'
+import ShareCodeScreen from "@/components/ShareCode";
+import DeviceScreen from "@/screens/deviceInfo";
+import React, { useState } from 'react';
+import { ScrollView, View } from "react-native";
 
 
 const Profile = () => {
@@ -21,7 +15,9 @@ const Profile = () => {
     loadCourses();
   }, []);
   return (
+    //<HlsVideoScreen />
     <View style={{flex: 1, padding: 20}} className="items-center bg-white">
+      
       <ScrollView className="w-full max-w-3xl px-4 mb-4 border-b border-gray-300 pb-4">
       <View  className="w-full max-w-3xl px-4 mb-4 border-b border-gray-300 pb-4 bg-lime-500">
       <DeviceScreen />      

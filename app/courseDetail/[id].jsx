@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text } from 'react-native';
-//import api from '../../api/api';
-import { router, useLocalSearchParams } from 'expo-router';
+import { getCourseById, getCourseProgress, getLessonsByCourseId } from '@/api/apiCalls';
+import { getPngUrl } from "@/api/pngurl";
 import YouTubeThumbnail from '@/components/Thumbnail';
-//import { API_URL } from '@/api/apiURL';
-import { getCourseById, getLessonsByCourseId, getCourseProgress } from '@/api/apiCalls';
 import { getDeviceInfo } from '@/utils/deviceInfo';
-import { useRef } from "react";
-//import { View } from 'react-native-reanimated/lib/typescript/Animated';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+
 
 export default function CourseDetailScreen() {
   const { id: courseId } = useLocalSearchParams();
   const [course, setCourse] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [courseProgress, setCourseProgress] = useState(null);
-  console.log('Course Progress:', courseProgress);
+  const img = getPngUrl(course?._id)
+
+  //console.log('Course Progress:', courseProgress);
+  //console.log('lessons:', lessons);
 
   const lastLessonId = courseProgress?.lastLesson?.lessonId;
-  console.log('Last Lesson ID:', lastLessonId);
+  //console.log('Last Lesson ID:', lastLessonId);
 const completedLessons = courseProgress?.progress?.completedLessons || [];
 const lessonRefs = useRef({});
-console.log("LessonRefs: ", lessonRefs)
+//console.log("LessonRefs: ", lessonRefs)
 
   const navigateWithParams = (lesson) => {
       router.navigate({
@@ -113,7 +114,24 @@ console.log("LessonRefs: ", lessonRefs)
           ${isLast ? "bg-blue-50 border-2 border-blue-500" : "bg-white"}
         `}
       >
-        <YouTubeThumbnail id={lesson.videoUrl} />
+        {
+          course.free 
+          ? <YouTubeThumbnail id={lesson.videoUrl} />
+          : <View className="w-96 bg-slate-200">
+                  <Image
+                    source={img || { uri: course.thumbnailUrl }}
+                    resizeMode="cover"
+                    className="w-full h-full"
+                    style={{
+                      width: "100%",
+                      aspectRatio: 16 / 9,
+                      height: 240, // cap
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
+        }
+        
 
         <Text className="text-base font-medium mt-2">
           {lesson.title}
