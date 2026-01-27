@@ -308,6 +308,8 @@ async function registerPaymentToBackend(payload) {
               <Text>၃. Screenshot ထည့်ပေးပါ</Text>
               <Text>၄. ဝယ်ယူမှု အောင်မြင်ပါပြီ 🎉</Text>
               <Text>5. Profile tab တွင် access code ၄ လုံးရရှိပြီး နောက် device တစ်ခုတွင် activate လုပ်နိုင်ပါ 🎉</Text>
+              <Text>6. ဝယ်ယူထားသော device နှင့် အခြား device တစ်ခု စုစုပေါင်း နှစ်ခု activate လုပ်နိုင်ပါသည်။ 🎉</Text>
+              <Text>7. activate code သက်တမ်းမှာ တစ်ရက်ဖြစ်ပါသည်။ 🎉</Text>
             </View>
 
             {/* Phone */}
