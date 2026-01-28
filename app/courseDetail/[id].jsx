@@ -117,15 +117,17 @@ const lessonRefs = useRef({});
         {
           course.free 
           ? <YouTubeThumbnail id={lesson.videoUrl} />
-          : <View className="w-96 bg-slate-200">
+          : <View className="w-80 h-44 bg-slate-200 rounded-lg overflow-hidden">
                   <Image
                     source={img || { uri: course.thumbnailUrl }}
-                    resizeMode="cover"
-                    className="w-full h-full"
+                    //resizeMode="cover"
+                    //className="w-full h-full"
+                    contentFit="cover"
                     style={{
+                      flex: 1,
                       width: "100%",
-                      aspectRatio: 16 / 9,
-                      height: 240, // cap
+                      //aspectRatio: 16 / 9,
+                      height: "100%", // cap
                       alignSelf: "center",
                     }}
                   />

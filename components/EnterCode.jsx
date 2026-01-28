@@ -1,15 +1,16 @@
-import { View, Text, TextInput, Pressable, Alert, ActivityIndicator } from "react-native";
-import { useState } from "react";
-import { useLocalSearchParams, router } from "expo-router";
-import * as Device from "expo-device";
-import { getDeviceInfo } from "@/utils/deviceInfo";
 import { API_URL } from "@/api/apiURL";
+import { useAlert } from "@/context/AlertContext";
+import { getDeviceInfo } from "@/utils/deviceInfo";
+import { router } from "expo-router";
+import { useState } from "react";
+import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
 
 
 export default  function EnterCodeScreen({courseId}) {
   //const { courseId } = useLocalSearchParams();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const { showAlert, showConfirm } = useAlert();
 
   
 
@@ -17,7 +18,8 @@ export default  function EnterCodeScreen({courseId}) {
     const deviceInfo = await getDeviceInfo();
   console.log("Device Info:", deviceInfo.id); // Log device info for debugging
     if (code.length !== 4) {
-      Alert.alert("Error", "4-digit code ထည့်ပါ");
+      //Alert.alert("Error", "4-digit code ထည့်ပါ");
+      showAlert("Error", "4-digit code ထည့်ပါ");
       return;
     }
 
@@ -40,21 +42,25 @@ export default  function EnterCodeScreen({courseId}) {
       const data = await res.json();
 
       if (!res.ok) {
-        Alert.alert("Failed", data.error || "Activation failed");
+        //Alert.alert("Failed", data.error || "Activation failed");
+        showAlert("Failed", data.error || "Activation failed");
         return;
       }
 
       if (data.error === "Code expired") {
-  Alert.alert("Expired", "Code သက်တမ်းကုန်သွားပါပြီ");
+        showAlert("Error", "Code သက်တမ်းကုန်သွားပါပြီ");
+        return;
 }
 
 
-      Alert.alert("Success 🎉", "ဒီ device မှာ course အသုံးပြုလို့ရပါပြီ");
+      //Alert.alert("Success 🎉", "ဒီ device မှာ course အသုံးပြုလို့ရပါပြီ");
+      showAlert("Success 🎉", "ဒီ device မှာ course အသုံးပြုလို့ရပါပြီ");
 
       // go back to course screen
       router.replace(`/course/${courseId}`);
     } catch (err) {
-      Alert.alert("Error", "Server error");
+      //Alert.alert("Error", "Server error");
+      showAlert("Error", "Server error");
     } finally {
       setLoading(false);
     }

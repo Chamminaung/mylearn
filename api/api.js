@@ -1,6 +1,6 @@
 // For now, we’ll mock data without a real backend
-import { PythonLesson } from "./pythonlessons";
 import { PFLessons } from "./pflessons";
+import { PythonLesson } from "./pythonlessons";
 import { ScratchLessons } from "./scratch";
 
 export default {
@@ -63,11 +63,24 @@ export default {
           { id: 'l3', title: 'Hooks Deep Dive', videoUrl: 'NbYeh4YIpqM' },
         ],
       },
+      {
+        _id: '6976ed52b1362fe057cf8644', // MongoDB style ID
+        id: '006',
+        title: 'Python Programming Advanced',
+        description: 'Hooks, Navigation & State Management',
+        thumbnailUrl: require('@/assets/python-paid.png'),
+        free : false,
+        paid : false,
+        price : 10000,
+        lessons: [
+          { id: 'l3', title: 'Hooks Deep Dive', videoUrl: 'NbYeh4YIpqM' },
+        ],
+      },
     ];
   },
   async getCourseById(id) {
     const courses = await this.getCourses();
-    return courses.find(c => c.id === id);
+    return courses.find(c => c._id === id);
   },
 
   async getLessonById(courseId, lessonId) {

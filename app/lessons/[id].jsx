@@ -1,3 +1,4 @@
+import api from '@/api/api';
 import {
   getCourseProgress,
   getLessonProgressByCourseId,
@@ -22,6 +23,19 @@ export default function LessonScreen() {
   const [canGoNext, setCanGoNext] = useState(false);
   const [lessonProgress, setLessonProgress] = useState({});
   const [courseProgress, setCourseProgress] = useState(null);
+  const [courseData, setCourseData] = useState(null);
+
+  /* ---------------- LOAD COURSE DATA ---------------- */
+  useEffect(() => {
+    async function loadCourseData() {
+      const data = await api.getCourseById(course);
+      setCourseData(data);
+    }
+    loadCourseData();
+  }, [course]);
+
+  //console.log("courseid:", course);
+  //console.log("Course Data:", courseData);
 
   const watchedLessons = courseProgress?.progress.completedLessons || [];
 
@@ -145,7 +159,7 @@ export default function LessonScreen() {
       {/* -------- VIDEO PLAYER -------- */}
       <View className="md:w-3/5 p-4">
       {
-        course.free
+        courseData?.free
         ? (
           <View className="bg-black rounded-xl overflow-hidden aspect-video">
           {Platform.OS === 'web' 
@@ -174,11 +188,10 @@ export default function LessonScreen() {
         :
         (
           <View className="bg-black rounded-xl overflow-hidden aspect-video">
-          <HlsVideoScreen videourl={currentLesson.videoUrl}/>
+            <HlsVideoScreen videoSource={currentLesson.videoUrl}/>
           </View>
         )
-      }
-        
+      }        
 
         {/* NEXT BUTTON */}
         <Pressable
