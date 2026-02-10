@@ -1,4 +1,6 @@
 //import HlsVideoScreen from '@/components/VideoPlayerPaid'
+import DeviceScreen from '@/components/DeviceScreen';
+import ShareCodeScreen from '@/components/ShareCodeScreen';
 import React, { useState } from 'react';
 import { ScrollView, View } from "react-native";
 
