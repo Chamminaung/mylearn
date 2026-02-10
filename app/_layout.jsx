@@ -20,7 +20,7 @@ export default function RootLayout() {
 
             <Stack screenOptions={{ header: () => <Header /> }}>
               <Stack.Screen name="(home)" />
-              <Stack.Screen name="(auth)" />
+              {/* <Stack.Screen name="(auth)" /> */}
               <Stack.Screen name="courseDetail/[id]" />
               <Stack.Screen name="lessons/[id]" />
               <Stack.Screen
