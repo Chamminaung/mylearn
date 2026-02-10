@@ -1,8 +1,6 @@
 //import HlsVideoScreen from '@/components/VideoPlayerPaid'
-import ShareCodeScreen from "@/components/ShareCode";
-import DeviceScreen from "@/screens/deviceInfo";
 import React, { useState } from 'react';
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 
 const Profile = () => {
@@ -15,9 +13,9 @@ const Profile = () => {
     loadCourses();
   }, []);
   return (
+    
     //<HlsVideoScreen />
-    <View style={{flex: 1, padding: 20}} className="items-center bg-white">
-      
+    <View style={{flex: 1, padding: 20}} className="items-center bg-white">    
       <ScrollView className="w-full max-w-3xl px-4 mb-4 border-b border-gray-300 pb-4">
       <View  className="w-full max-w-3xl px-4 mb-4 border-b border-gray-300 pb-4 bg-lime-500">
       <DeviceScreen />      

@@ -1,55 +1,124 @@
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { ActivityIndicator, Button, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
 
 
-// const videoSource =
-//   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 export default function HlsVideoScreen({ videoSource }) {
-  // const videoSource =
-  // 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-  const player = useVideoPlayer(videoSource, player => {
+
+  const [playerStatus, setPlayerStatus] = useState(null);
+  const [playerError, setPlayerError] = useState(null);
+  //videoSource = 'https://my-worker.chamminaung25.workers.dev/003_Checking_Python_Interpreter/index.m3u8'
+  
+  console.log('Initializing player with source: ', videoSource);
+  
+
+  const player = useVideoPlayer(
+  {
+    uri: videoSource,
+    contentType: 'hls',
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+      "Access-Control-Allow-Headers": "Range",
+      "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Access-Control-Max-Age": "86400",
+
+    },
+  }, player => {
     player.loop = true;
     player.play();
+  }
+);
+
+// ...Imports, definition of the component, creating the player etc.
+
+useEffect(() => {
+  const subscription = player.addListener('statusChange', ({ status, error }) => {
+    setPlayerStatus(status);
+    setPlayerError(error);
+    console.log('Player status changed: ', status);
+    console.log('Player error: ', error);
   });
 
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
-    /* ⏳ Loading / Ready / Error state */
-  const { status } = useEvent(player, 'statusChange', {
-    status: player?.status ?? 'idle',
-  });
+  return () => {
+    subscription.remove();
+  };
+}, []);
+// Rest of the component...
+
+// useEffect(() => {
+//   if (!player) return;
+
+//   player.loop = true;
+//   player.play();
+// }, [player]);
+
+
+
+  // ✅ SAFE useEvent
+  const { isPlaying } = player
+    ? useEvent(player, 'playingChange', {
+        isPlaying: player.playing,
+      })
+    : { isPlaying: false };
+
+  const { status } = player
+    ? useEvent(player, 'statusChange', {
+        status: player.status,
+      })
+    : { status: 'idle' };
+
+  if (!videoSource) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text>No video source</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>
       <View style={styles.card}>
-      <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-         {status === 'loading' && (
-           <View style={styles.overlay}>
-             <ActivityIndicator size="large" />
-             <Text style={styles.overlayText}>Loading video...</Text>
-           </View>
-         )}
-
-         {status === 'error' && (
-           <View style={styles.overlay}>
-             <Text style={[styles.overlayText, { color: 'red' }]}>
-               Video cannot be played
-             </Text>
-           </View>
-         )}
-      <View style={styles.controlsContainer}>
-        <Button
-          title={isPlaying ? 'Pause' : 'Play'}
-          onPress={() => {
-            if (isPlaying) {
-              player.pause();
-            } else {
-              player.play();
-            }
+        <VideoView
+          //ref={videoRef}
+          style={styles.video}
+          player={player}
+          contentFit="contain"
+          allowsFullscreen
+          fullscreenOptions={{
+            enable: true,
           }}
+          nativeControls
+          allowsPictureInPicture
         />
-      </View>
+
+        {status === 'loading' && (
+          <View style={styles.overlay}>
+            <ActivityIndicator size="large" />
+            <Text style={styles.overlayText}>Loading video...</Text>
+          </View>
+        )}
+
+        {status === 'error' && (
+          <View style={styles.overlay}>
+            <Text style={[styles.overlayText, { color: 'red' }]}>
+              Video cannot be played
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.controls}>
+          <Button
+            title={isPlaying ? 'Pause' : 'Play'}
+            onPress={() => {
+              if (!player) return;
+              isPlaying ? player.pause() : player.play();
+            }}
+          />
+        </View>
       </View>
     </View>
   );
@@ -75,10 +144,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    inset: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -88,6 +154,107 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+
+// import { useEvent } from 'expo';
+// import { useVideoPlayer, VideoView } from 'expo-video';
+// import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
+
+
+// // const videoSource =
+// //   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+// export default function HlsVideoScreen({ videoSource }) {
+//   // const videoSource =
+//   // 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+//   const player = useVideoPlayer(videoSource, player => {
+//     player.loop = true;
+//     player.play();
+//   });
+
+//   const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+//     /* ⏳ Loading / Ready / Error state */
+//   const { status } = useEvent(player, 'statusChange', {
+//     status: player?.status ?? 'idle',
+//   });
+
+//   return (
+//     <View style={styles.screen}>
+//       <View style={styles.card}>
+//       <VideoView 
+//         style={styles.video} 
+//         player={player} 
+//         fullscreenOptions={{
+//           enabled: true,
+//           autoEnter: false,
+//           autoExit: true,
+//         }} 
+//         allowsPictureInPicture
+//        />
+//          {status === 'loading' && (
+//            <View style={styles.overlay}>
+//              <ActivityIndicator size="large" />
+//              <Text style={styles.overlayText}>Loading video...</Text>
+//            </View>
+//          )}
+
+//          {status === 'error' && (
+//            <View style={styles.overlay}>
+//              <Text style={[styles.overlayText, { color: 'red' }]}>
+//                Video cannot be played
+//              </Text>
+//            </View>
+//          )}
+//       <View style={styles.controlsContainer}>
+//         <Button
+//           title={isPlaying ? 'Pause' : 'Play'}
+//           onPress={() => {
+//             if (isPlaying) {
+//               player.pause();
+//             } else {
+//               player.play();
+//             }
+//           }}
+//         />
+//       </View>
+//       </View>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   screen: {
+//     width: '100%',
+//   },
+//   card: {
+//     width: '100%',
+//     borderRadius: 16,
+//     overflow: 'hidden',
+//     backgroundColor: '#000',
+//   },
+//   video: {
+//     width: '100%',
+//     aspectRatio: 16 / 9,
+//     backgroundColor: '#000',
+//   },
+//   controls: {
+//     padding: 12,
+//   },
+//   overlay: {
+//     position: 'absolute',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     backgroundColor: 'rgba(0,0,0,0.4)',
+//   },
+//   overlayText: {
+//     marginTop: 8,
+//     color: '#fff',
+//   },
+// });
 
 // const styles = StyleSheet.create({
 //   contentContainer: {

@@ -1,4 +1,16 @@
 
+import api from "@/api/api";
+import {
+  getPurchaseStatus
+} from "@/api/apiCalls";
+import { getPngUrl } from "@/api/pngurl";
+import PFOverview from "@/app/modals/PFModal";
+import PythonCourseOverview from "@/app/modals/PythonModal";
+import PythonCourseOutlineExpo from "@/app/modals/PythonPaidModal";
+import ScratchOverview from "@/app/modals/ScratchModal";
+import { BuyButton } from "@/components/BuyButton";
+import { FreeButton } from "@/components/FreeButton";
+import { getDeviceInfo } from "@/utils/deviceInfo";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,18 +25,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
-import { BuyButton } from "@/components/BuyButton";
-import { FreeButton } from "@/components/FreeButton";
-
-import { getCourses, getPurchaseStatus } from "@/api/apiCalls";
-import { getPngUrl } from "@/api/pngurl";
-import { getDeviceInfo } from "@/utils/deviceInfo";
-
-import PFOverview from "@/app/modals/PFModal";
-import PythonCourseOverview from "@/app/modals/PythonModal";
-import PythonCourseOutlineExpo from "@/app/modals/PythonPaidModal";
-import ScratchOverview from "@/app/modals/ScratchModal";
-
 export default function HomeScreen() {
   const [courses, setCourses] = useState([]);
   const [purchaseStatus, setPurchaseStatus] = useState({});
@@ -33,6 +33,8 @@ export default function HomeScreen() {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+
+  console.log("parched status:", purchaseStatus);
 
   /* =============================
      RESPONSIVE GRID
@@ -49,7 +51,7 @@ export default function HomeScreen() {
   ============================== */
   useEffect(() => {
     async function loadData() {
-      const list = await getCourses();
+      const list = await api.getCourses();
       setCourses(list);
 
       const device = await getDeviceInfo();
@@ -57,6 +59,9 @@ export default function HomeScreen() {
 
       for (const c of list) {
         const res = await getPurchaseStatus(device.id, c._id);
+        //console.log("course id:", c._id, "device id:", device.id);
+        //console.log("purchase res:", res);
+        //console.log("access:", res && res.access === true);
         purchased[c._id] = res && res.access === true;
       }
 
@@ -119,7 +124,7 @@ export default function HomeScreen() {
       <View className="w-full bg-slate-200">
         <Image
           source={img || { uri: course.thumbnailUrl }}
-          resizeMode="cover"
+          resizeMode="contain"
           className="w-full h-full"
           style={{
             width: "100%",

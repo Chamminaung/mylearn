@@ -1,4 +1,5 @@
-import { getCourseById, getCourseProgress, getLessonsByCourseId } from '@/api/apiCalls';
+import api from '@/api/api';
+import { getCourseProgress } from '@/api/apiCalls';
 import { getPngUrl } from "@/api/pngurl";
 import YouTubeThumbnail from '@/components/Thumbnail';
 import { getDeviceInfo } from '@/utils/deviceInfo';
@@ -28,12 +29,13 @@ const lessonRefs = useRef({});
         pathname: '/lessons/[id]',
         params: { id: lesson.id, course: course?._id },
       });
-      console.log('Navigating to lesson:', lesson.id, 'of course:', course?._id)
+      console.log('Navigating to lesson:', lesson.id, 'of course:', course?.id)
     }
 
   useEffect(() => {
     async function load() {
-      const data = await getCourseById(courseId)
+      //const data = await getCourseById(courseId)
+      const data = await api.getCourseById(courseId);
       setCourse(data);
     }
     load();
@@ -53,7 +55,9 @@ const lessonRefs = useRef({});
   useEffect(() => {
     if (course) {
       async function load() {
-      const lessons = await getLessonsByCourseId(course._id)
+      //const lessons = await getLessonsByCourseId(course._id)
+      //const lessons = await api.getLessonsByCourseId(course._id)
+      const lessons = course.lessons; // use embedded lessons
       setLessons(lessons);
     }
     load();

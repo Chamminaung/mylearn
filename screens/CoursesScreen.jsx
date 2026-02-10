@@ -1,4 +1,5 @@
-import { getCourseProgress, getCourses, getPurchaseStatus } from "@/api/apiCalls";
+import api from "@/api/api";
+import { getCourseProgress, getPurchaseStatus } from "@/api/apiCalls";
 import { getPngUrl } from "@/api/pngurl";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -35,7 +36,8 @@ export default function CourseScreen() {
     // ----------------------------
     useEffect(() => {
       async function loadCourses() {
-        const data = await getCourses();
+        //const data = await getCourses();
+        const data = await api.getCourses();
         setCourses(data);
 
         const device = await getDeviceInfo();

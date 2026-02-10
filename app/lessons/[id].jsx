@@ -28,7 +28,7 @@ export default function LessonScreen() {
   /* ---------------- LOAD COURSE DATA ---------------- */
   useEffect(() => {
     async function loadCourseData() {
-      const data = await api.getCourseById(course);
+      const data = await api.getCourseBy_id(course);
       setCourseData(data);
     }
     loadCourseData();
@@ -188,7 +188,8 @@ export default function LessonScreen() {
         :
         (
           <View className="bg-black rounded-xl overflow-hidden aspect-video">
-            <HlsVideoScreen videoSource={currentLesson.videoUrl}/>
+            <HlsVideoScreen videoSource= {currentLesson.videoUrl}
+            />
           </View>
         )
       }        
