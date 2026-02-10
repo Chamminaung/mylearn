@@ -1,6 +1,6 @@
 //import HlsVideoScreen from '@/components/VideoPlayerPaid'
 import React, { useState } from 'react';
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 
 const Profile = () => {
