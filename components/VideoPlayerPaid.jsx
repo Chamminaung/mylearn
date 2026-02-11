@@ -17,16 +17,16 @@ export default function HlsVideoScreen({ videoSource }) {
   const player = useVideoPlayer(
   {
     uri: videoSource,
-    contentType: 'hls',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
-      "Access-Control-Allow-Headers": "Range",
-      "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges",
-      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Access-Control-Max-Age": "86400",
+    // contentType: 'hls',
+    // headers: {
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+    //   "Access-Control-Allow-Headers": "Range",
+    //   "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges",
+    //   "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    //   "Access-Control-Max-Age": "86400",
 
-    },
+    // },
   }, player => {
     player.loop = true;
     player.play();
