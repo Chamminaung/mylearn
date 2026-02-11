@@ -55,10 +55,42 @@ const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 
 /* ---------- HELPERS ---------- */
+// function diffFromNow(dateStr) {
+//   // dateStr = "2026-10-02 15:45:32"
+
+//   const [datePart, timePart] = dateStr.split(" ");
+//   const [year, month, day] = datePart.split("-").map(Number);
+//   const [hour, minute, second] = timePart.split(":").map(Number);
+
+//   // JS month = 0-based
+//   const target = new Date(year, month - 1, day, hour, minute, second);
+//   const now = new Date();
+
+//   let ms = target - now;
+//   if (ms < 0) ms = 0; // past date safety (optional)
+
+//   const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+//   const hours = Math.floor(
+//     (ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+//   );
+//   const minutes = Math.floor(
+//     (ms % (1000 * 60 * 60)) / (1000 * 60)
+//   );
+//   const seconds = Math.floor(
+//     (ms % (1000 * 60)) / 1000
+//   );
+
+//   return { days, hours, minutes, seconds };
+// }
+
 function checkDateTime(now, target) {
   const ms = Math.abs(new Date(now) - new Date(target));
-  return { days: Math.floor(ms / (1000 * 60 * 60 * 24)) };
-}
+  console.log("Time gap in ms:", ms);
+  return { days: Math.floor(ms / (1000 * 60 * 60 * 24)),
+    hours: Math.floor(ms / (1000 * 60 * 60)),
+    minutes: Math.floor(ms / (1000 * 60)),
+    };
+   };
 
 async function uploadImageForOCR(base64) {
   const res = await axios.post(BACKEND_OCR_ENDPOINT, { base64 });
@@ -80,6 +112,9 @@ async function validateOCRText(text, price) {
     return { ok: false, reason: "Receiver name mismatch" };
 
   const result = checkDateTime(new Date(), text.transaction_time);
+  console.log("Current time:", new Date());
+  console.log("Transaction time:", text.transaction_time);
+  console.log("Date gap:", result, "days");
   if (result.days > parseInt(EXPECTED_DATETIME_GAP))
     return { ok: false, reason: "Transaction too old" };
 
@@ -171,8 +206,10 @@ export default function PayScreen() {
       const ocrRaw = await uploadImageForOCR(image.base64);
       const clean = ocrRaw.text.replace(/`/g, "").replace(/\n/g, " ");
       const ocr = JSON.parse(clean);
+      console.log("OCR Validation Result:", ocr);
 
       const validation = await validateOCRText(ocr, price);
+      
       if (!validation.ok) {
         showAlert("Validation Failed", validation.reason);
         return;
