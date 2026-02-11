@@ -83,14 +83,46 @@ const SHEET_HEIGHT = SCREEN_HEIGHT * 0.85;
 //   return { days, hours, minutes, seconds };
 // }
 
-function checkDateTime(now, target) {
-  const ms = Math.abs(new Date(now) - new Date(target));
-  console.log("Time gap in ms:", ms);
-  return { days: Math.floor(ms / (1000 * 60 * 60 * 24)),
-    hours: Math.floor(ms / (1000 * 60 * 60)),
-    minutes: Math.floor(ms / (1000 * 60)),
-    };
-   };
+function getDateTimeDiff(inputDateTime) {
+  // input format: yyyy-dd-mm HH:mm:ss
+  const [datePart, timePart] = inputDateTime.split(" ");
+  const [year, day, month] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+
+  // JS Date: month is 0-based
+  const targetDate = new Date(year, month - 1, day, hour, minute, second);
+  const now = new Date();
+
+  let diffMs = Math.abs(targetDate - now); // milliseconds difference
+
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  diffMs %= (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  diffMs %= (1000 * 60 * 60);
+
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  diffMs %= (1000 * 60);
+
+  const seconds = Math.floor(diffMs / 1000);
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds
+  };
+}
+
+
+// function checkDateTime(now, target) {
+//   const ms = Math.abs(new Date(now) - new Date(target));
+//   console.log("Time gap in ms:", ms);
+//   return { days: Math.floor(ms / (1000 * 60 * 60 * 24)),
+//     hours: Math.floor(ms / (1000 * 60 * 60)),
+//     minutes: Math.floor(ms / (1000 * 60)),
+//     };
+//    };
 
 async function uploadImageForOCR(base64) {
   const res = await axios.post(BACKEND_OCR_ENDPOINT, { base64 });
@@ -111,7 +143,7 @@ async function validateOCRText(text, price) {
   if (!EXPECTED_RECIVER_NAME.some((n) => name.includes(n)))
     return { ok: false, reason: "Receiver name mismatch" };
 
-  const result = checkDateTime(new Date(), text.transaction_time);
+  const result = getDateTimeDiff(text.transaction_time);
   console.log("Current time:", new Date());
   console.log("Transaction time:", text.transaction_time);
   console.log("Date gap:", result, "days");
