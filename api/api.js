@@ -87,7 +87,7 @@ export default {
         thumbnailUrl: require('@/assets/python-paid.png'),
         free : false,
         paid : false,
-        price : 1000,
+        price : 10000,
         totalDuration : "5h 30m",
         totalLessons : PythonPaidLesson.lessons.length,
         lessons: PythonPaidLesson.lessons,

@@ -4,7 +4,7 @@
     "slug": "video-learn-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",    
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-icon.png"
     },
@@ -14,14 +14,18 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "scheme": ["videolearnapp", "exp+video-learn-app"],
+    "scheme": [
+      "videolearnapp",
+      "exp+video-learn-app"
+    ],
     "userInterfaceStyle": "automatic",
-
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chamminaung.videolearnapp"
+      "bundleIdentifier": "com.chamminaung.videolearnapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
-
     "android": {
       "package": "com.chamminaung.videolearnapp",
       "adaptiveIcon": {
@@ -30,14 +34,11 @@
       },
       "icon": "./assets/icon.png",
       "edgeToEdgeEnabled": true
-            
     },
-
     "web": {
       "favicon": "./assets/favicon.png",
       "output": "static"
     },
-
     "plugins": [
       "expo-router",
       "expo-secure-store",
@@ -49,6 +50,12 @@
           "supportsPictureInPicture": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e4007657-01cd-4124-9449-0e4e21ac2f3f"
+      }
+    }
   }
 }
